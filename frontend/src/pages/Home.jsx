@@ -1,69 +1,44 @@
 import React from "react";
 import Blog from "../components/Blog";
+import { useState, useEffect } from "react";
+import { fetchallposts ,deletePost} from "../api";
 
 function Home() {
-	const blogs = [
-		{
-			title: "tech",
-			content: "loremhjdhs jdsd",
-			type: "food",
+	
+	const [posts,setPosts] =useState([])
+	useEffect(()=>{
+		 //You need async here because you'll use await inside it to wait for the API response.
+		const loadPosts = async ()=>{
+			try{
+				const post = await fetchallposts()
+				setPosts(post)
+			}catch(error){
+        console.error("Failed to load posts", error);
+ 
+			}
+		}
+		loadPosts()
+	 },[])
 
-			author: "science",
-			date: new Date(),
-		},
-		{
-			title: "tech",
-			content: "loremhjdhs jdsd",
-			type: "food",
 
-			author: "science",
-			date: new Date(),
-		},
-		{
-			title: "tech",
-			content: "loremhjdhs jdsd",
-			type: "food",
+	//   Only the Home component can modify the posts state using setPosts().
 
-			author: "science",
-			date: new Date(),
-		},
-		{
-			title: "tech",
-			content: "loremhjdhs jdsd",
-			type: "food",
-			author: "science",
-			date: new Date(),
-		},
-		{
-			title: "tech",
-			content: "loremhjdhs jdsd",
-			type: "food",
-			author: "science",
-			date: new Date(),
-		},
-		{
-			title: "tech",
-			content: "loremhjdhs jdsd",
-			type: "food",
-			author: "science",
-			date: new Date(),
-		},
-		{
-			title: "tech",
-			content: "loremhjdhs jdsd",
-			type: "food",
-
-			author: "science",
-			date: new Date(),
-		},
-	];
+  // This handles delete + UI update
+  const handleDelete = async (id) => {
+    try {
+      await deletePost(id);
+      setPosts((prev) => prev.filter((p) => p.id !== id));
+    } catch (error) {
+      console.error("Failed to delete post", error);
+    }
+  };
 
 	return (
 		<div>
 			<div className="bg-gray-200 min-h-screen p-4">
 				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-4">
-					{blogs.map((blog, index) => {
-						return <Blog key={index} blog={blog} />;
+					{posts.map((blog) => {
+						return <Blog key={blog.id} blog={blog} ondelete={handleDelete}/>;
 					})}
 				</div>
 			</div>

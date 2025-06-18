@@ -1,20 +1,21 @@
 import {BrowserRouter, Route,Routes} from 'react-router-dom'
 import Navbar from '../src/components/Navbar'
 import Home from './pages/Home'
+import NewPost from './pages/NewPost'
+import Edit from "./pages/Edit"
 function App() {
 
   return (
-    <BrowserRouter>
     <div>
-       <h1 className='text-[#1c6cae]  p-2 text-xl text-center font-semibold sm:xl md:text-3xl'>Blog APP</h1>
+    <BrowserRouter>
        <Navbar/>
        <Routes>
-        <Route path='/' element={<Home/>}>
-
-    </Route>
+        <Route path='/' element={<Home/>}/>
+        <Route path='/new' element={<NewPost/>}/>
+<Route path='/edit/:id' element={<Edit />} />
        </Routes>
-    </div>
     </BrowserRouter>
+    </div>
   )
 }
 
